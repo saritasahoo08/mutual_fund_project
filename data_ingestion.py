@@ -1,152 +1,106 @@
 import pandas as pd
-import os
 
-print("="*70)
-print("DAY 1: DATA INGESTION AND EXPLORATION")
-print("="*70)
+# Load all 10 CSV files
+print("Loading CSV files...")
 
-# List of all 10 CSV files
-csv_files = [
-    "data/raw/01_fund_master.csv",
-    "data/raw/02_nav_history.csv",
-    "data/raw/03_aum_by_fund_house.csv",
-    "data/raw/04_monthly_sip_inflows.csv",
-    "data/raw/05_category_inflows.csv",
-    "data/raw/06_industry_folio_count.csv",
-    "data/raw/07_scheme_performance.csv",
-    "data/raw/08_investor_transactions.csv",
-    "data/raw/09_portfolio_holdings.csv",
-    "data/raw/10_benchmark_indices.csv",
-]
+df1 = pd.read_csv("data/raw/01_fund_master.csv")
+df2 = pd.read_csv("data/raw/02_nav_history.csv")
+df3 = pd.read_csv("data/raw/03_aum_by_fund_house.csv")
+df4 = pd.read_csv("data/raw/04_monthly_sip_inflows.csv")
+df5 = pd.read_csv("data/raw/05_category_inflows.csv")
+df6 = pd.read_csv("data/raw/06_industry_folio_count.csv")
+df7 = pd.read_csv("data/raw/07_scheme_performance.csv")
+df8 = pd.read_csv("data/raw/08_investor_transactions.csv")
+df9 = pd.read_csv("data/raw/09_portfolio_holdings.csv")
+df10 = pd.read_csv("data/raw/10_benchmark_indices.csv")
 
-datasets = {}
+# Print details for each file
+print("\n1. Fund Master")
+print("Shape:", df1.shape)
+print("Columns:", df1.dtypes)
+print(df1.head())
 
-for filepath in csv_files:
-    filename = os.path.basename(filepath)
-    print(f"\n{'='*70}")
-    print(f"FILE: {filename}")
-    print(f"{'='*70}")
-    
-    # Check if file exists
-    if not os.path.exists(filepath):
-        print(f"❌ FILE NOT FOUND: {filepath}")
-        continue
-    
-    # Load CSV
-    df = pd.read_csv(filepath)
-    datasets[filename] = df
-    
-    # Print shape
-    print(f"\n📊 SHAPE: {df.shape[0]} rows × {df.shape[1]} columns")
-    
-    # Print data types
-    print(f"\n📋 DATA TYPES:")
-    print(df.dtypes)
-    
-    # Print first few rows
-    print(f"\n📄 FIRST 5 ROWS:")
-    print(df.head())
-    
-    # Check for missing values
-    print(f"\n⚠️ MISSING VALUES (Null counts):")
-    missing = df.isnull().sum()
-    if missing.sum() == 0:
-        print("   ✅ NO MISSING VALUES")
-    else:
-        print(missing[missing > 0])
-    
-    # Check for duplicates
-    print(f"\n🔄 DUPLICATES:")
-    dup_count = df.duplicated().sum()
-    print(f"   Total duplicate rows: {dup_count}")
-    
-    # Check data ranges for numeric columns
-    numeric_cols = df.select_dtypes(include=['float64', 'int64']).columns
-    if len(numeric_cols) > 0:
-        print(f"\n🔢 NUMERIC COLUMN RANGES:")
-        for col in numeric_cols[:5]:  # Show first 5 numeric columns
-            print(f"   {col}: min={df[col].min()}, max={df[col].max()}")
+print("\n2. NAV History")
+print("Shape:", df2.shape)
+print("Columns:", df2.dtypes)
+print(df2.head())
 
-# SECTION 2: EXPLORE FUND MASTER
-print(f"\n\n{'='*70}")
-print("SECTION 2: FUND MASTER EXPLORATION")
-print(f"{'='*70}")
+print("\n3. AUM by Fund House")
+print("Shape:", df3.shape)
+print("Columns:", df3.dtypes)
+print(df3.head())
 
-fund_master = datasets['01_fund_master.csv']
+print("\n4. Monthly SIP Inflows")
+print("Shape:", df4.shape)
+print("Columns:", df4.dtypes)
+print(df4.head())
 
-print("\n🏢 UNIQUE FUND HOUSES:")
-print(fund_master['fund_house'].unique())
-print(f"   Total: {fund_master['fund_house'].nunique()}")
+print("\n5. Category Inflows")
+print("Shape:", df5.shape)
+print("Columns:", df5.dtypes)
+print(df5.head())
 
-print("\n📂 UNIQUE CATEGORIES:")
-print(fund_master['category'].unique())
-print(f"   Total: {fund_master['category'].nunique()}")
+print("\n6. Industry Folio Count")
+print("Shape:", df6.shape)
+print("Columns:", df6.dtypes)
+print(df6.head())
 
-print("\n🏷️ UNIQUE SUB-CATEGORIES:")
-print(fund_master['sub_category'].unique())
-print(f"   Total: {fund_master['sub_category'].nunique()}")
+print("\n7. Scheme Performance")
+print("Shape:", df7.shape)
+print("Columns:", df7.dtypes)
+print(df7.head())
 
-print("\n⚡ UNIQUE RISK GRADES:")
-print(fund_master['risk_category'].unique())
-print(f"   Total: {fund_master['risk_category'].nunique()}")
+print("\n8. Investor Transactions")
+print("Shape:", df8.shape)
+print("Columns:", df8.dtypes)
+print(df8.head())
 
-print("\n📍 AMFI CODE RANGE:")
-print(f"   Min: {fund_master['amfi_code'].min()}")
-print(f"   Max: {fund_master['amfi_code'].max()}")
-print(f"   Total codes: {fund_master['amfi_code'].nunique()}")
+print("\n9. Portfolio Holdings")
+print("Shape:", df9.shape)
+print("Columns:", df9.dtypes)
+print(df9.head())
 
-# SECTION 3: VALIDATE AMFI CODES
-print(f"\n\n{'='*70}")
-print("SECTION 3: AMFI CODE VALIDATION")
-print(f"{'='*70}")
+print("\n10. Benchmark Indices")
+print("Shape:", df10.shape)
+print("Columns:", df10.dtypes)
+print(df10.head())
 
-nav_history = datasets['02_nav_history.csv']
+# Check for missing values
+print("\nChecking for missing values...")
+print("Fund Master missing:", df1.isnull().sum().sum())
+print("NAV History missing:", df2.isnull().sum().sum())
 
-master_codes = set(fund_master['amfi_code'].unique())
-nav_codes = set(nav_history['amfi_code'].unique())
+# Explore fund_master
+print("\nUnique Fund Houses:")
+print(df1['fund_house'].unique())
+print("Total:", df1['fund_house'].nunique())
 
-print(f"\n📊 CODE COMPARISON:")
-print(f"   Codes in fund_master: {len(master_codes)}")
-print(f"   Codes in nav_history: {len(nav_codes)}")
+print("\nUnique Categories:")
+print(df1['category'].unique())
 
-# Find codes in master but not in nav
-missing_in_nav = master_codes - nav_codes
-if len(missing_in_nav) > 0:
-    print(f"\n⚠️ CODES IN MASTER BUT NOT IN NAV_HISTORY ({len(missing_in_nav)}):")
-    print(f"   {missing_in_nav}")
+print("\nUnique Sub-Categories:")
+print(df1['sub_category'].unique())
+
+print("\nUnique Risk Grades:")
+print(df1['risk_category'].unique())
+
+# AMFI Code validation
+print("\n=== AMFI CODE VALIDATION ===")
+codes_in_master = df1['amfi_code'].unique()
+codes_in_nav = df2['amfi_code'].unique()
+
+print("Codes in fund_master:", len(codes_in_master))
+print("Codes in nav_history:", len(codes_in_nav))
+
+# Check if all master codes exist in nav
+missing_codes = []
+for code in codes_in_master:
+    if code not in codes_in_nav:
+        missing_codes.append(code)
+
+if len(missing_codes) > 0:
+    print("Missing codes:", missing_codes)
 else:
-    print(f"\n✅ ALL CODES IN MASTER EXIST IN NAV_HISTORY")
+    print("All codes in master exist in nav_history")
 
-# Find codes in nav but not in master
-extra_in_nav = nav_codes - master_codes
-if len(extra_in_nav) > 0:
-    print(f"\n⚠️ CODES IN NAV_HISTORY BUT NOT IN MASTER ({len(extra_in_nav)}):")
-    print(f"   {extra_in_nav}")
-else:
-    print(f"\n✅ NO EXTRA CODES IN NAV_HISTORY")
-
-# DATA QUALITY SUMMARY
-print(f"\n\n{'='*70}")
-print("DATA QUALITY SUMMARY")
-print(f"{'='*70}")
-
-quality_report = f"""
-✅ POSITIVE FINDINGS:
-   • All 10 CSV files loaded successfully
-   • Total records across all datasets: {sum(len(df) for df in datasets.values()):,}
-   • Fund master contains {len(master_codes)} unique schemes
-   • NAV history has {len(nav_codes)} schemes with price data
-   
-⚠️ OBSERVATIONS:
-   • Fund master: {fund_master.isnull().sum().sum()} null values
-   • NAV history: {nav_history.isnull().sum().sum()} null values
-   • AMFI code coverage: {len(master_codes & nav_codes)}/{len(master_codes)} funds have NAV data
-   
-✅ STATUS: Data is ready for analysis
-"""
-
-print(quality_report)
-
-print(f"{'='*70}")
-print("DATA INGESTION COMPLETE ✅")
-print(f"{'='*70}\n")
+print("\nData ingestion complete!")
