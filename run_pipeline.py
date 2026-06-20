@@ -24,7 +24,7 @@ def run_step(step_name, script_path):
     Run one script as a separate step in the pipeline.
 
     step_name: a short label printed to the screen (e.g. "Data Cleaning")
-    script_path: the path to the .py file to run (e.g. "data_cleaning.py")
+    script_path: the path to the .py file to run (e.g. "scripts/data_cleaning.py")
 
     Returns True if the script finished without errors, False otherwise.
     """
@@ -56,8 +56,8 @@ def main():
     print("Starting pipeline run...")
 
     steps = [
-        ("Data Cleaning", "data_cleaning.py"),
-        ("Database Creation", "create_database.py"),
+        ("Data Cleaning", "scripts/data_cleaning.py"),
+        ("Database Creation", "scripts/create_database.py"),
     ]
 
     for step_name, script_path in steps:
